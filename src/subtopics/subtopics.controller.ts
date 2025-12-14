@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { SubtopicsService } from './subtopics.service';
 import { CreateSubtopicDto } from './dto/create-subtopic.dto';
 import { UpdateSubtopicDto } from './dto/update-subtopic.dto';
@@ -28,7 +36,10 @@ export class SubtopicsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSubtopicDto: UpdateSubtopicDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateSubtopicDto: UpdateSubtopicDto,
+  ) {
     return this.subtopicsService.update(+id, updateSubtopicDto);
   }
 
