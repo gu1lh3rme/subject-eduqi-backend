@@ -25,14 +25,14 @@ export class SubtopicsController {
     return this.subtopicsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.subtopicsService.findOne(+id);
-  }
-
   @Get('subject/:subjectId')
   findBySubject(@Param('subjectId') subjectId: string) {
     return this.subtopicsService.findBySubject(+subjectId);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.subtopicsService.findOne(+id);
   }
 
   @Patch(':id')

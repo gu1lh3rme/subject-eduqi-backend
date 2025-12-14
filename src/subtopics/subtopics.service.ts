@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateSubtopicDto } from './dto/create-subtopic.dto';
 import { UpdateSubtopicDto } from './dto/update-subtopic.dto';
@@ -22,12 +22,18 @@ export class SubtopicsService {
   }
 
   async findOne(id: number) {
-    return this.prisma.subtopic.findUnique({
+    const subtopic = await this.prisma.subtopic.findUnique({
       where: { id },
       include: {
         subject: true,
       },
     });
+
+    if (!subtopic) {
+      throw new NotFoundException(`Subtopic with ID ${id} not found`);
+    }
+
+    return subtopic;
   }
 
   async findBySubject(subjectId: number) {
@@ -37,6 +43,8 @@ export class SubtopicsService {
   }
 
   async update(id: number, updateSubtopicDto: UpdateSubtopicDto) {
+    await this.findOne(id); // Check if exists
+
     return this.prisma.subtopic.update({
       where: { id },
       data: updateSubtopicDto,
@@ -44,6 +52,8 @@ export class SubtopicsService {
   }
 
   async remove(id: number) {
+    await this.findOne(id); // Check if exists
+
     return this.prisma.subtopic.delete({
       where: { id },
     });
