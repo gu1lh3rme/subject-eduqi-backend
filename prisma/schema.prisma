@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// In Prisma 7, the datasource URL is configured in prisma.config.ts
+// and passed to the PrismaClient constructor
+datasource db {
+  provider = "postgresql"
+}
+
+model Subject {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  subtopics   Subtopic[]
+}
+
+model Subtopic {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  subjectId   Int
+  subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([subjectId])
+}
