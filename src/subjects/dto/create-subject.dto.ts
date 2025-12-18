@@ -1,16 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateSubjectDto {
   @ApiProperty({ 
     description: 'The name of the subject',
     example: 'Mathematics'
   })
+  @IsNotEmpty()
+  @IsString()
   name: string;
-
-  @ApiProperty({ 
-    description: 'Optional description of the subject',
-    example: 'Advanced mathematics course covering algebra and calculus',
-    required: false
-  })
-  description?: string;
 }

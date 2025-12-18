@@ -34,40 +34,49 @@ export class SubtopicsController {
 
   @Get('subject/:subjectId')
   @ApiOperation({ summary: 'Get all subtopics for a specific subject' })
-  @ApiParam({ name: 'subjectId', type: 'number', description: 'Subject ID' })
+  @ApiParam({ name: 'subjectId', type: 'string', description: 'Subject UUID' })
   @ApiResponse({ status: 200, description: 'List of subtopics for the subject' })
   @ApiResponse({ status: 404, description: 'Subject not found' })
   findBySubject(@Param('subjectId') subjectId: string) {
-    return this.subtopicsService.findBySubject(+subjectId);
+    return this.subtopicsService.findBySubject(subjectId);
+  }
+
+  @Get('hierarchy/:subjectId')
+  @ApiOperation({ summary: 'Get complete hierarchy for a specific subject' })
+  @ApiParam({ name: 'subjectId', type: 'string', description: 'Subject UUID' })
+  @ApiResponse({ status: 200, description: 'Complete hierarchical structure of the subject' })
+  @ApiResponse({ status: 404, description: 'Subject not found' })
+  findSubjectHierarchy(@Param('subjectId') subjectId: string) {
+    return this.subtopicsService.findSubjectHierarchy(subjectId);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a subtopic by ID' })
-  @ApiParam({ name: 'id', type: 'number', description: 'Subtopic ID' })
+  @ApiParam({ name: 'id', type: 'string', description: 'Subtopic UUID' })
   @ApiResponse({ status: 200, description: 'Subtopic found successfully' })
   @ApiResponse({ status: 404, description: 'Subtopic not found' })
   findOne(@Param('id') id: string) {
-    return this.subtopicsService.findOne(+id);
+    return this.subtopicsService.findOne(id);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update a subtopic' })
-  @ApiParam({ name: 'id', type: 'number', description: 'Subtopic ID' })
+  @ApiParam({ name: 'id', type: 'string', description: 'Subtopic UUID' })
   @ApiResponse({ status: 200, description: 'Subtopic updated successfully' })
   @ApiResponse({ status: 404, description: 'Subtopic not found' })
   update(
     @Param('id') id: string,
     @Body() updateSubtopicDto: UpdateSubtopicDto,
   ) {
-    return this.subtopicsService.update(+id, updateSubtopicDto);
+    return this.subtopicsService.update(id, updateSubtopicDto);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a subtopic' })
-  @ApiParam({ name: 'id', type: 'number', description: 'Subtopic ID' })
+  @ApiParam({ name: 'id', type: 'string', description: 'Subtopic UUID' })
   @ApiResponse({ status: 200, description: 'Subtopic deleted successfully' })
   @ApiResponse({ status: 404, description: 'Subtopic not found' })
   remove(@Param('id') id: string) {
-    return this.subtopicsService.remove(+id);
+    return this.subtopicsService.remove(id);
   }
 }

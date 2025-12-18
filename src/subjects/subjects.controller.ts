@@ -34,28 +34,28 @@ export class SubjectsController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a subject by ID' })
-  @ApiParam({ name: 'id', type: 'number', description: 'Subject ID' })
+  @ApiParam({ name: 'id', type: 'string', description: 'Subject UUID' })
   @ApiResponse({ status: 200, description: 'Subject found successfully' })
   @ApiResponse({ status: 404, description: 'Subject not found' })
   findOne(@Param('id') id: string) {
-    return this.subjectsService.findOne(+id);
+    return this.subjectsService.findOne(id);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update a subject' })
-  @ApiParam({ name: 'id', type: 'number', description: 'Subject ID' })
+  @ApiParam({ name: 'id', type: 'string', description: 'Subject UUID' })
   @ApiResponse({ status: 200, description: 'Subject updated successfully' })
   @ApiResponse({ status: 404, description: 'Subject not found' })
   update(@Param('id') id: string, @Body() updateSubjectDto: UpdateSubjectDto) {
-    return this.subjectsService.update(+id, updateSubjectDto);
+    return this.subjectsService.update(id, updateSubjectDto);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a subject' })
-  @ApiParam({ name: 'id', type: 'number', description: 'Subject ID' })
+  @ApiParam({ name: 'id', type: 'string', description: 'Subject UUID' })
   @ApiResponse({ status: 200, description: 'Subject deleted successfully' })
   @ApiResponse({ status: 404, description: 'Subject not found' })
   remove(@Param('id') id: string) {
-    return this.subjectsService.remove(+id);
+    return this.subjectsService.remove(id);
   }
 }

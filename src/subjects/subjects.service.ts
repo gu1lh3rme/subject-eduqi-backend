@@ -13,31 +13,67 @@ export class SubjectsService {
     });
   }
 
-  async findAll() {
-    return this.prisma.subject.findMany({
-      include: {
-        subtopics: true,
-      },
+  private async getSubtopicsWithChildren(where: any): Promise<any[]> {
+    const subtopics = await this.prisma.subtopic.findMany({
+      where,
     });
+
+    const subtopicsWithChildren = await Promise.all(
+      subtopics.map(async (subtopic) => {
+        const children = await this.getSubtopicsWithChildren({
+          parentId: subtopic.id,
+        });
+        return {
+          ...subtopic,
+          subtopics: children,
+        };
+      })
+    );
+
+    return subtopicsWithChildren;
   }
 
-  async findOne(id: number) {
+  async findAll() {
+    const subjects = await this.prisma.subject.findMany();
+    
+    const subjectsWithSubtopics = await Promise.all(
+      subjects.map(async (subject) => {
+        const subtopics = await this.getSubtopicsWithChildren({
+          subjectId: subject.id,
+          parentId: null,
+        });
+        return {
+          ...subject,
+          subtopics,
+        };
+      })
+    );
+
+    return subjectsWithSubtopics;
+  }
+
+  async findOne(id: string) {
     const subject = await this.prisma.subject.findUnique({
       where: { id },
-      include: {
-        subtopics: true,
-      },
     });
 
     if (!subject) {
       throw new NotFoundException(`Subject with ID ${id} not found`);
     }
 
-    return subject;
+    const subtopics = await this.getSubtopicsWithChildren({
+      subjectId: subject.id,
+      parentId: null,
+    });
+
+    return {
+      ...subject,
+      subtopics,
+    };
   }
 
-  async update(id: number, updateSubjectDto: UpdateSubjectDto) {
-    await this.findOne(id); // Check if exists
+  async update(id: string, updateSubjectDto: UpdateSubjectDto) {
+    await this.findOne(id); 
 
     return this.prisma.subject.update({
       where: { id },
@@ -45,8 +81,8 @@ export class SubjectsService {
     });
   }
 
-  async remove(id: number) {
-    await this.findOne(id); // Check if exists
+  async remove(id: string) {
+    await this.findOne(id);
 
     return this.prisma.subject.delete({
       where: { id },

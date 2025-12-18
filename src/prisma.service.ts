@@ -26,6 +26,10 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
   }
 
   // Proxy all PrismaClient methods
+  get user() {
+    return this.prisma.user;
+  }
+
   get subject() {
     return this.prisma.subject;
   }

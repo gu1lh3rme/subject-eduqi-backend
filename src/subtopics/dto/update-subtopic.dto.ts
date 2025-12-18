@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class UpdateSubtopicDto {
   @ApiProperty({ 
     description: 'The name of the subtopic',
-    example: 'Algebra',
+    example: 'Álgebra',
     required: false
   })
   name?: string;
@@ -17,8 +17,15 @@ export class UpdateSubtopicDto {
 
   @ApiProperty({ 
     description: 'The ID of the parent subject',
-    example: 1,
+    example: '123e4567-e89b-12d3-a456-426614174000',
     required: false
   })
-  subjectId?: number;
+  subjectId?: string;
+
+  @ApiProperty({ 
+    description: 'The ID of the parent subtopic (optional for root level)',
+    example: '123e4567-e89b-12d3-a456-426614174001',
+    required: false
+  })
+  parentId?: string;
 }

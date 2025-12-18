@@ -13,19 +13,40 @@ export class SubtopicsService {
     });
   }
 
-  async findAll() {
-    return this.prisma.subtopic.findMany({
+  private async getSubtopicsWithChildren(where: any): Promise<any[]> {
+    const subtopics = await this.prisma.subtopic.findMany({
+      where,
       include: {
         subject: true,
+        parent: true,
       },
     });
+
+    const subtopicsWithChildren = await Promise.all(
+      subtopics.map(async (subtopic) => {
+        const children = await this.getSubtopicsWithChildren({
+          parentId: subtopic.id,
+        });
+        return {
+          ...subtopic,
+          subtopics: children,
+        };
+      })
+    );
+
+    return subtopicsWithChildren;
   }
 
-  async findOne(id: number) {
+  async findAll() {
+    return this.getSubtopicsWithChildren({});
+  }
+
+  async findOne(id: string) {
     const subtopic = await this.prisma.subtopic.findUnique({
       where: { id },
       include: {
         subject: true,
+        parent: true,
       },
     });
 
@@ -33,17 +54,46 @@ export class SubtopicsService {
       throw new NotFoundException(`Subtopic with ID ${id} not found`);
     }
 
-    return subtopic;
+    const children = await this.getSubtopicsWithChildren({
+      parentId: subtopic.id,
+    });
+
+    return {
+      ...subtopic,
+      subtopics: children,
+    };
   }
 
-  async findBySubject(subjectId: number) {
-    return this.prisma.subtopic.findMany({
-      where: { subjectId },
+  async findBySubject(subjectId: string) {
+    return this.getSubtopicsWithChildren({
+      subjectId,
+      parentId: null, // Apenas subtópicos raiz
     });
   }
 
-  async update(id: number, updateSubtopicDto: UpdateSubtopicDto) {
-    await this.findOne(id); // Check if exists
+  async findSubjectHierarchy(subjectId: string) {
+    const subject = await this.prisma.subject.findUnique({
+      where: { id: subjectId },
+    });
+
+    if (!subject) {
+      throw new NotFoundException(`Subject with ID ${subjectId} not found`);
+    }
+
+    const subtopics = await this.getSubtopicsWithChildren({
+      subjectId,
+      parentId: null, // Apenas subtópicos raiz
+    });
+
+    return {
+      id: subject.id,
+      name: subject.name,
+      subtopics,
+    };
+  }
+
+  async update(id: string, updateSubtopicDto: UpdateSubtopicDto) {
+    await this.findOne(id); 
 
     return this.prisma.subtopic.update({
       where: { id },
@@ -51,8 +101,8 @@ export class SubtopicsService {
     });
   }
 
-  async remove(id: number) {
-    await this.findOne(id); // Check if exists
+  async remove(id: string) {
+    await this.findOne(id); 
 
     return this.prisma.subtopic.delete({
       where: { id },
