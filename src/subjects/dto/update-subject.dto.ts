@@ -1,17 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { PartialType } from '@nestjs/swagger';
+import { CreateSubjectDto } from './create-subject.dto';
 
-export class UpdateSubjectDto {
-  @ApiProperty({ 
-    description: 'The name of the subject',
-    example: 'Mathematics',
-    required: false
-  })
-  name?: string;
-
-  @ApiProperty({ 
-    description: 'Optional description of the subject',
-    example: 'Advanced mathematics course covering algebra and calculus',
-    required: false
-  })
-  description?: string;
-}
+export class UpdateSubjectDto extends PartialType(CreateSubjectDto) {}
