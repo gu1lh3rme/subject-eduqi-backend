@@ -30,6 +30,7 @@ async function bootstrap() {
           'http://localhost:8000', // Alternative port
           'http://127.0.0.1:3000',
           'http://127.0.0.1:5173',
+          'https://subject-eduqi.vercel.app', // Frontend Vercel
         ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],

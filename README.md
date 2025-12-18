@@ -1,14 +1,50 @@
 # Subject EduQi Backend
 
-A NestJS API with Prisma ORM for managing educational subjects and subtopics.
+A NestJS API with Prisma ORM for managing educational subjects, subtopics, and questions.
 
 ## Features
 
 - **NestJS** framework for building scalable server-side applications
 - **Prisma ORM** for database management
-- **MySQL/PostgreSQL** database support
-- RESTful API for managing Subjects and Subtopics
-- One-to-many relationship: A Subject can have multiple Subtopics
+- **PostgreSQL** database support
+- RESTful API for managing Subjects, Subtopics, and Questions
+- Authentication with JWT
+- Question management with validation system
+- Swagger documentation
+
+## Deploy to Vercel
+
+### Step 1: Configure Database
+
+You'll need a PostgreSQL database. You can use:
+- [Supabase](https://supabase.com) (free tier available)
+- [Neon](https://neon.tech) (free tier available)
+- [Railway](https://railway.app) (free tier available)
+
+### Step 2: Deploy Backend to Vercel
+
+1. Push your code to GitHub
+2. Go to [Vercel Dashboard](https://vercel.com/dashboard)
+3. Import your GitHub repository
+4. Set the following environment variables in Vercel:
+
+#### Required Environment Variables:
+- `DATABASE_URL`: Your PostgreSQL connection string
+- `JWT_SECRET`: A secure random string for JWT signing
+
+#### Optional Environment Variables:
+- `CORS_ORIGINS`: Comma-separated list of allowed origins (defaults include your frontend)
+- `PORT`: Port number (default: 8080)
+
+### Step 3: Configure Frontend
+
+Update your frontend to use the Vercel backend URL:
+```javascript
+// Replace localhost with your Vercel backend URL
+const API_BASE_URL = 'https://your-backend.vercel.app';
+```
+
+## Local Development
 
 ## Prerequisites
 

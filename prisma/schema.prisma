@@ -26,6 +26,7 @@ model Subject {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   subtopics   Subtopic[]
+  questions   Question[]
 }
 
 model Subtopic {
@@ -42,4 +43,23 @@ model Subtopic {
 
   @@index([subjectId])
   @@index([parentId])
+}
+
+model Question {
+  id                 String   @id @default(uuid())
+  statement          String
+  alternativeA       String
+  alternativeB       String
+  alternativeC       String
+  alternativeD       String
+  alternativeE       String
+  correctAlternative String
+  subjectId          String
+  subject            Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  difficulty         String
+  status             String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([subjectId])
 }

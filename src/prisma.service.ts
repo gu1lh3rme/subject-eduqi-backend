@@ -38,6 +38,10 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
     return this.prisma.subtopic;
   }
 
+  get question() {
+    return this.prisma.question;
+  }
+
   get $connect() {
     return this.prisma.$connect.bind(this.prisma);
   }

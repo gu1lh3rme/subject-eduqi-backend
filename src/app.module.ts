@@ -6,6 +6,7 @@ import { SubjectsModule } from './subjects/subjects.module';
 import { SubtopicsModule } from './subtopics/subtopics.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { QuestionsModule } from './questions/questions.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UsersModule } from './users/users.module';
     SubtopicsModule,
     AuthModule,
     UsersModule,
+    QuestionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
